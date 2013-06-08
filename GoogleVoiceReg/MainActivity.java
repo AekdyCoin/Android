@@ -1,14 +1,7 @@
-@Override
-public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.startSpeek: //start_btn
-			Intent i=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-			startActivityForResult(i, REQ_SPEECH);
-			break;
-		default:
-			break;
-		}
-}
+//intent
+Intent i=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+startActivityForResult(i, REQ_SPEECH);
+
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
