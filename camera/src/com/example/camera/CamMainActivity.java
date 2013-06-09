@@ -8,6 +8,8 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -22,22 +24,27 @@ public class CamMainActivity extends Activity {
 	private static MyCamera camera ;
 	private static Bitmap img ;
 	private static ImageButton btn_cap;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);/*隐藏标题*/
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);/*全屏，去掉状态栏*/
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);/*保持屏幕亮，别才开几秒就关了*/
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
+		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
 		setContentView(R.layout.activity_main);
 		
-		
+		DisplayMetrics dm = new DisplayMetrics();  
+		getWindowManager().getDefaultDisplay().getMetrics(dm);  
+		  	
 		camera = new MyCamera(((SurfaceView) this.findViewById( R.id.surView)) , 
 				shutterCallback,
 				rawCallback,
-				jpegCallback) ;
+				jpegCallback,
+				dm) ;
 		
 		Button.OnClickListener onclicklistener = new Button.OnClickListener() {
 			public void onClick(View v) {
