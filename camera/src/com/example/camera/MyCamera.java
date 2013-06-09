@@ -16,14 +16,43 @@ public class MyCamera implements SurfaceHolder.Callback {
 	
 	private static Camera camera;
 	private static SurfaceHolder sholder;
-	private static Bitmap img = null ;
+	private static Bitmap img = null;
+
+	private static ShutterCallback shutterCallback;
+	private static PictureCallback rawCallback;
+	private static PictureCallback jpegCallback ;
 	
-	public Bitmap getBitmap() {
-		return img;
-	}
-	
-	MyCamera(SurfaceView surface) {
-		
+	/*
+	 * 3 callback
+	 	ShutterCallback shutterCallback = new ShutterCallback() {
+			public void onShutter() {
+				//Called as near as possible to the moment when a photo is captured from the sensor. 
+				//This is a good opportunity to play a shutter sound or give other feedback of camera operation. 
+				//This may be some time after the photo was triggered, but some time BEFORE the actual data is available.
+			}
+	 	};	
+	 	PictureCallback rawCallback = new PictureCallback() {
+			public void onPictureTaken(byte[] data, Camera camera) {
+				//Called when image data is available after a picture is taken. 
+				//The format of the data depends on the CONTEXT of the callback and Camera.Parameters settings.
+			}
+		};
+		PictureCallback jpegCallback = new PictureCallback() {
+			public void onPictureTaken(byte[] data, Camera camera) {
+				//Called when image data is available after a picture is taken. 
+				//The format of the data depends on the CONTEXT of the callback and Camera.Parameters settings.
+			}
+		};
+	 * 
+	 * 
+	 * */
+	MyCamera( SurfaceView surface, 
+			ShutterCallback _shutterCallback,
+			PictureCallback _rawCallback,
+			PictureCallback _jpegCallback) {
+		shutterCallback = _shutterCallback;
+		rawCallback = _rawCallback;
+		jpegCallback = _jpegCallback;
 		//step 1. Obtain an instance of Camera from open(int).
 		camera = Camera.open();
 		//step 2. Get existing (default) settings with getParameters().
@@ -40,19 +69,6 @@ public class MyCamera implements SurfaceHolder.Callback {
 		//setPreviewDisplay(SurfaceHolder). Without a surface, the camera will be unable to start the preview.
 		sholder= surface.getHolder();
 		sholder.addCallback( this ) ;
-		
-		/*
-		Button.OnClickListener onclicklistener = new Button.OnClickListener() {
-			public void onClick(View v) {
-				// step 7. When you want, call
-				// takePicture(Camera.ShutterCallback, Camera.PictureCallback,
-				// Camera.PictureCallback, Camera.PictureCallback)
-				// to capture a photo. Wait for the callbacks to provide the
-				// actual image data.
-				camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-			}
-		};*/
-		
 	}
 	
 	public void takePicture() {
@@ -83,46 +99,5 @@ public class MyCamera implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
     	//This is called immediately after any structural changes (format or size) have been made to the surface.
     }
-    
-	ShutterCallback shutterCallback = new ShutterCallback() {
-		public void onShutter() {
-			/*Called as near as possible to the moment when a photo is captured from the sensor. 
-			 * This is a good opportunity to play a shutter sound or give other feedback of camera operation. 
-			 * This may be some time after the photo was triggered, but some time BEFORE the actual data is available.
-			*/
-		}
-	};
 
-	PictureCallback rawCallback = new PictureCallback() {
-		public void onPictureTaken(byte[] data, Camera camera) {
-			/*Called when image data is available after a picture is taken. 
-			 * The format of the data depends on the CONTEXT of the callback and Camera.Parameters settings.
-			*/
-		}
-	};
-
-	PictureCallback jpegCallback = new PictureCallback() {
-		public void onPictureTaken(byte[] data, Camera camera) {
-			/*Called when image data is available after a picture is taken. 
-			 * The format of the data depends on the CONTEXT of the callback and Camera.Parameters settings.
-			*/
-			img = BitmapFactory.decodeByteArray(data, 0, data.length);
-			Log.v("SIZE",  Integer.toString( img.getByteCount()>>10 ) + "KB");
-			Log.v("XY", Integer.toString( img.getHeight() ) + " " + Integer.toString( img.getWidth()));
-			//step 8*. After taking a picture, preview display will have stopped.
-			//To take more photos, call startPreview() again first.
-			//step 9. Call stopPreview() to stop updating the preview surface.
-			
-			//step 10. Important: Call release() to release the camera for use by other applications.
-			//Applications should release the camera immediately in onPause() (and re-open() it in onResume()).
-			if (camera != null) {
-				/*
-				 * un-comment the following code to frozen the pic.
-				 * */
-//				camera.stopPreview();
-//				camera.release();
-				camera.startPreview();
-			}
-		}
-	};
 }
