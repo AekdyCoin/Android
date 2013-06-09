@@ -17,7 +17,7 @@ import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class MainActivity extends Activity {
+public class CamMainActivity extends Activity {
 	
 	private static MyCamera camera ;
 	private static Bitmap img ;
