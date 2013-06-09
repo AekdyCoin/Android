@@ -86,7 +86,7 @@ public class MyCamera implements SurfaceHolder.Callback {
 		camPar.setPictureSize(_sz.width, _sz.height);
 		_sz = getOptimalPreviewSize( camPar ) ;
 		camPar.setPreviewSize(_sz.width, _sz.height);
-		camPar.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+		camPar.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 		camera.setParameters( camPar );
 		//step 4. If desired, call setDisplayOrientation(int).
 		//step 5. Important: Pass a fully initialized SurfaceHolder to _
@@ -96,7 +96,6 @@ public class MyCamera implements SurfaceHolder.Callback {
 		
 		sholder.setFixedSize(_sz.width, _sz.height);
 		sholder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		
 	}
 	
 	
