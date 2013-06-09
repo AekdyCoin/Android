@@ -1,58 +1,51 @@
 package com.example.camera;
 
 import java.io.IOException;
-import java.util.List;
 
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
-import android.hardware.Camera.Size;
+import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.ShutterCallback;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.SurfaceHolder;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+import android.widget.Button;
+import android.widget.ImageButton;
 
-public class MainActivity extends Activity implements SurfaceHolder.Callback {
+public class MainActivity extends Activity {
 	
-	private static Camera camera;
-	private static SurfaceHolder sholder;
+	private static MyCamera camera ;
+	private static Bitmap img ;
+	private static ImageButton btn_cap;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);/*隐藏标题*/
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);/*全屏，去掉状态栏*/
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);/*保持屏幕亮，别才开几秒就关了*/
 		
 		setContentView(R.layout.activity_main);
-		//step 1. Obtain an instance of Camera from open(int).
-		camera = Camera.open();
-		//step 2. Get existing (default) settings with getParameters().
-		Camera.Parameters camPar = camera.getParameters();
-		//step 3. If necessary, modify the returned Camera.Parameters object and call setParameters(Camera.Parameters).
-		camPar.setJpegQuality( 100 );
-		if(!camPar.isAutoExposureLockSupported()) 
-			camPar.setAutoExposureLock( true );
-		camPar.setPictureFormat(ImageFormat.JPEG);
-		camera.setParameters( camPar );
-		//step 4. If desired, call setDisplayOrientation(int).
-		//step 5. Important: Pass a fully initialized SurfaceHolder to _
-		//setPreviewDisplay(SurfaceHolder). Without a surface, the camera will be unable to start the preview.
-		sholder= ((SurfaceView) this.findViewById( R.id.surView)) .getHolder();
-		sholder.addCallback( this ) ;
+		camera = new MyCamera( ((SurfaceView) this.findViewById( R.id.surView)) ) ;
 		
-		//step 6. Important: Call startPreview() to start updating the preview surface.
-		//Preview must be started before you can take a picture.
-		camera.startPreview();
+		Button.OnClickListener onclicklistener = new Button.OnClickListener() {
+			public void onClick(View v) {
+				camera.takePicture();
+			}
+		};
+		btn_cap = (ImageButton) this.findViewById( R.id.btn_cap) ;
+		btn_cap.setOnClickListener( 
+				onclicklistener
+		);
 	}
 
 	@Override
@@ -61,27 +54,5 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	public void surfaceCreated(SurfaceHolder holder) {
-        // The Surface has been created, acquire the camera and tell it where
-        // to draw.
-        try {
-            if (camera != null) {
-            	camera.setPreviewDisplay(holder);
-            }
-        } catch (IOException e) {
-        	Log.v("mess",e.getMessage() );
-        }
-    }
-	
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        // Surface will be destroyed when we return, so stop the preview.
-        if (camera != null) {
-        	camera.stopPreview();
-        }
-    }
-	
-    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-    	
-    }
+
 }
