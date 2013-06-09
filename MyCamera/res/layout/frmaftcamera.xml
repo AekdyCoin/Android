@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CamMainActivity" >
+
+    <ImageView
+        android:id="@+id/imgShow"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/customborder" />
+
+        <ImageButton
+            android:id="@+id/btnno"
+            style="@android:style/MediaButton.Play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="49dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/customborder"
+            android:src="@drawable/icnno" />
+
+    <ImageButton
+        android:id="@+id/btnyes"
+        style="@android:style/MediaButton.Play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnno"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/customborder"
+        android:src="@drawable/icnyes" />
+    
+</RelativeLayout>

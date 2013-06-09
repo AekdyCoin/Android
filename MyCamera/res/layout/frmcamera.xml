@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CamMainActivity" >
+
+       <SurfaceView
+        android:id="@+id/surView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+       
+    <ImageButton
+        android:id="@+id/btnno"
+        style="@android:style/MediaButton.Play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="21dp"
+        android:background="@drawable/customborder"
+        android:src="@drawable/ic_launcher_btn" />
+
+</RelativeLayout>
