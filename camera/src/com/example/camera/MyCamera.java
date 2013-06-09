@@ -5,7 +5,11 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
@@ -19,7 +23,6 @@ public class MyCamera implements SurfaceHolder.Callback {
 	
 	private static Camera camera;
 	private static SurfaceHolder sholder;
-	private static Bitmap img = null;
 
 	private static ShutterCallback shutterCallback;
 	private static PictureCallback rawCallback;
@@ -88,6 +91,8 @@ public class MyCamera implements SurfaceHolder.Callback {
 		camPar.setPreviewSize(_sz.width, _sz.height);
 		camPar.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 		camera.setParameters( camPar );
+		camera.autoFocus( autocallback );
+		
 		//step 4. If desired, call setDisplayOrientation(int).
 		//step 5. Important: Pass a fully initialized SurfaceHolder to _
 		//setPreviewDisplay(SurfaceHolder). Without a surface, the camera will be unable to start the preview.
@@ -96,6 +101,7 @@ public class MyCamera implements SurfaceHolder.Callback {
 		
 		sholder.setFixedSize(_sz.width, _sz.height);
 		sholder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		
 	}
 	
 	
@@ -148,12 +154,13 @@ public class MyCamera implements SurfaceHolder.Callback {
 		  
 		screenWidth  = (int)(dm.widthPixels * density + 0.5f);      // 屏幕宽（px，如：480px）  
 		screenHeight = (int)(dm.heightPixels * density + 0.5f);     // 屏幕高（px，如：800px）  
-		Log.v("WHB = ", Integer.toString( screenWidth ) + " " + Integer.toString( screenHeight ) + "  "
-			 + Double.toString( (double) screenWidth /screenHeight   )	);
+//		Log.v("WHB = ", Integer.toString( screenWidth ) + " " + Integer.toString( screenHeight ) + "  "
+//			 + Double.toString( (double) screenWidth /screenHeight   )	);
 	}
 	public void takePicture() {
 		camera.takePicture(shutterCallback, rawCallback, jpegCallback);
 	}
+	
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, acquire the camera and tell it where
@@ -183,4 +190,11 @@ public class MyCamera implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
     	//This is called immediately after any structural changes (format or size) have been made to the surface.
     }
+	
+	Camera.AutoFocusCallback autocallback = new Camera.AutoFocusCallback() {
+		@Override
+		public void onAutoFocus(boolean success, Camera camera) {
+			// onAutoFocus
+		}
+	};
 }
